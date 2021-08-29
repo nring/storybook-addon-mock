@@ -69,6 +69,7 @@ export class Faker {
             method: request.method || 'GET',
             status: request.status || 200,
             skip: false,
+            delay: 0,
         };
     };
 
@@ -114,8 +115,11 @@ export class Faker {
         const matched = this.matchMock(url, method);
 
         if (matched) {
+            const { status, response, delay } = matched;
             return new Promise((resolve) => {
-                resolve(new Response(url, matched.status, matched.response));
+                setTimeout(() => {
+                    resolve(new Response(url, status, response));
+                }, delay);
             });
         }
         // eslint-disable-next-line no-restricted-globals
@@ -126,7 +130,10 @@ export class Faker {
         const { method, url } = xhr;
         const matched = this.matchMock(url, method);
         if (matched) {
-            xhr.respond(+matched.status, {}, matched.response);
+            const { status, response, delay } = matched;
+            setTimeout(() => {
+                xhr.respond(+status, {}, response);
+            }, delay);
         } else {
             // eslint-disable-next-line new-cap
             const realXhr = new global.realXMLHttpRequest();

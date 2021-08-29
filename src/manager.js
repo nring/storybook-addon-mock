@@ -22,6 +22,11 @@ const MockPanel = () => {
         emit(ADDONS_MOCK_UPDATE_DATA, item, 'skip', !item.skip);
     };
 
+    const handleDelayTime = (item, delayTime) => {
+        console.log(delayTime);
+        emit(ADDONS_MOCK_UPDATE_DATA, item, 'delay', delayTime);
+    };
+
     const onStatusChange = (item, value) => {
         emit(ADDONS_MOCK_UPDATE_DATA, item, 'status', value);
     };
@@ -40,6 +45,7 @@ const MockPanel = () => {
                     skip={item.skip}
                     method={item.method}
                     status={item.status}
+                    delay={item.delay}
                     response={item.response}
                     onToggle={() => onSkip(item)}
                     onStatusChange={(event) =>
@@ -47,6 +53,9 @@ const MockPanel = () => {
                     }
                     onResponseChange={(value) =>
                         onResponseChange(item, value.jsObject)
+                    }
+                    onDelayChange={(event) =>
+                        handleDelayTime(item, event.target.value)
                     }
                 />
             ))}
